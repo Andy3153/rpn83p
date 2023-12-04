@@ -22,6 +22,7 @@ SRCS := \
 	const1.asm \
 	conv.asm \
 	crc.asm \
+	datehandlers.asm \
 	debug.asm \
 	display.asm \
 	errorcode.asm \
