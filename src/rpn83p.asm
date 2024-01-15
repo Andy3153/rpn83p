@@ -122,7 +122,9 @@ rpntrue equ 1
 
 ; RpnObect type enums.
 rpnObjectTypeReal equ 0
-rpnObjectTypeComplex equ $C ; same as TI-OS
+rpnObjectTypeComplex equ $0C ; same as TI-OS
+; Date Record: struct {type:u8, year:u16, month:u8, day:u8}, 5 bytes.
+rpnObjectTypeDate equ $18 ; next unused object type
 
 ; An RpnObject is a struct of a type byte and 2 RpnFloat objects so that a
 ; complex number can be stored. See the struct definitions in vars.asm. If the
@@ -839,6 +841,19 @@ _ProbCombLabel:
 _ProbComb equ _ProbCombLabel-branchTableBase
     .dw ProbComb
     .db 1
+; format1.asm
+_FormatU16ToD4Label:
+_FormatU16ToD4 equ _FormatU16ToD4Label-branchTableBase
+    .dw FormatU16ToD4
+    .db 1
+_FormatU8ToD2Label:
+_FormatU8ToD2 equ _FormatU8ToD2Label-branchTableBase
+    .dw FormatU8ToD2
+    .db 1
+_FormatDateRecord:
+_FormatDateRecord equ _FormatDateRecord-branchTableBase
+    .dw FormatDateRecord
+    .db 1
 
 #ifdef DEBUG
 ; debug.asm
@@ -946,12 +961,14 @@ defpage(1)
 #include "errorcode.asm"
 #include "print1.asm"
 #include "input1.asm"
+#include "inputdate1.asm"
 #include "arg1.asm"
 #include "base1.asm"
 #include "pstring1.asm"
 #include "memory1.asm"
 #include "float1.asm"
 #include "integer1.asm"
+#include "format1.asm"
 #include "const1.asm"
 #include "complex1.asm"
 #include "tvm.asm"

@@ -27,6 +27,7 @@ SRCS := \
 	errorcode.asm \
 	float.asm \
 	float1.asm \
+	format1.asm \
 	fps.asm \
 	handlers.asm \
 	handlertab.asm \
@@ -34,6 +35,7 @@ SRCS := \
 	hms.asm \
 	input.asm \
 	input1.asm \
+	inputdate1.asm \
 	integer1.asm \
 	main.asm \
 	mainparser.asm \

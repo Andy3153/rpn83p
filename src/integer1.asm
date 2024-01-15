@@ -117,6 +117,8 @@ convertOP1ToHLLoopEntry:
     djnz convertOP1ToHLLoop
     ret
 
+;------------------------------------------------------------------------------
+
 ; Description: Multiply HL by 10.
 ; Input: HL
 ; Output: HL=10*HL
@@ -143,4 +145,27 @@ addHLByA:
     ld a, 0
     adc a, h
     ld h, a
+    ret
+
+; Description: Divide HL by C
+; Input: HL:dividend; C=divisor
+; Output: HL:quotient; A:remainder
+; Destroys: A, HL
+; Preserves: BC, DE
+divHLByC:
+    push bc
+    xor a ; A=remainder
+    ld b, 16
+divHLByCLoop:
+    add hl, hl
+    rla
+    jr c, divHLByCOne ; remainder overflowed, so must substract
+    cp c ; if remainder(A) < divisor(C): CF=1
+    jr c, divHLByCZero
+divHLByCOne:
+    sub c
+    inc l ; set bit 0 of quotient
+divHLByCZero:
+    djnz divHLByCLoop
+    pop bc
     ret
