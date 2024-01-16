@@ -854,6 +854,11 @@ _FormatDateRecord:
 _FormatDateRecord equ _FormatDateRecord-branchTableBase
     .dw FormatDateRecord
     .db 1
+; date1.asm
+_IsLeap:
+_IsLeap equ _IsLeap-branchTableBase
+    .dw IsLeap
+    .db 1
 
 #ifdef DEBUG
 ; debug.asm
@@ -972,6 +977,7 @@ defpage(1)
 #include "format1.asm"
 #include "const1.asm"
 #include "complex1.asm"
+#include "date1.asm"
 #include "tvm.asm"
 #include "hms.asm"
 #include "prob.asm"
