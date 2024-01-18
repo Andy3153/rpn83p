@@ -668,7 +668,7 @@ _GetLastCharLabel:
 _GetLastChar equ _GetLastCharLabel-branchTableBase
     .dw GetLastChar
     .db 1
-; integer1.asm
+; integerconv1.asm
 _ConvertAToOP1PageOneLabel:
 _ConvertAToOP1PageOne equ _ConvertAToOP1PageOneLabel-branchTableBase
     .dw ConvertAToOP1PageOne
@@ -990,6 +990,7 @@ defpage(1)
 #include "memory1.asm"
 #include "float1.asm"
 #include "integer1.asm"
+#include "integerconv1.asm"
 #include "format1.asm"
 #include "const1.asm"
 #include "complex1.asm"
