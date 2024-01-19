@@ -183,19 +183,24 @@ ConvertOP1ToI40:
     ld a, (OP1)
     bit 7, a ; ZF=0 if negative
     jr z, convertOP1ToI40Pos
-    ; Handle negative. Strictly speaking, this code does not handle the
-    ; smallest negative value of -2^39, but that's beyond the normal usage of
-    ; this function, so it's not worth spending effort to handle that special
-    ; case.
+    ; Handle negative by changing the sign of the floating point, converting it
+    ; to U40, then doing a two's complement to get an i40.  Strictly speaking,
+    ; this code does not handle the smallest negative value of -2^39, but
+    ; that's beyond the normal usage of this function, so it's not worth
+    ; spending effort to handle that special case.
     res 7, a
     ld (OP1), a
     call convertOP1ToI40Pos
+    ld a, (OP1)
     set 7, a
     ld (OP1), a
+    call negU40 ; two's complement
     ret
 convertOP1ToI40Pos:
+    push hl
     call op2Set2Pow39PageOne
     bcall(_CpOP1OP2) ; if OP1 >= 2^39: CF=0
+    pop hl
     jr nc, convertOP1ToU40Error
     ; [[fallthrough]]
 
@@ -211,7 +216,7 @@ convertOP1ToI40Pos:
 ;   - OP1: unsigned 40-bit integer as a floating point number
 ;   - HL: pointer to a u40 in memory, cannot be OP2
 ; Output:
-;   - HL: OP1 converted to a u40, in little-endian format
+;   - HL:u40: OP1 converted to a u40, in little-endian format
 ;   - C: u40StatusCode
 ; Destroys: A, B, C, DE
 ; Preserves: HL, OP1, OP2

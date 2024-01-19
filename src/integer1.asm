@@ -11,8 +11,23 @@
 ; entry.
 ;------------------------------------------------------------------------------
 
+; Description: Add A to HL.
+; Input: HL, A
+; Output: HL+=A
+; Destroys: A
+; Preserves: BC, DE
+addHLByA:
+    add a, l
+    ld l, a
+    ld a, 0
+    adc a, h
+    ld h, a
+    ret
+
+;------------------------------------------------------------------------------
+
 ; Description: Multiply HL by BC, overflow ignored.
-; Input: HL
+; Input: HL=X; BC=Y
 ; Output: HL*=BC
 ; Preserves: BC, DE
 ; Destroys: A
@@ -26,7 +41,7 @@ multHLByBCLoop:
     rl e
     rl d ; shiftLeft(DE)
     jr nc, multHLByBCNoMult
-    add hl, bc ; sum+=X
+    add hl, bc ; sum+=Y
 multHLByBCNoMult:
     dec a
     jr nz, multHLByBCLoop
@@ -48,19 +63,9 @@ multHLBy10:
     pop de
     ret
 
-; Description: Add A to HL.
-; Input: HL, A
-; Output: HL+=A
-; Destroys: A
-; Preserves: BC, DE
-addHLByA:
-    add a, l
-    ld l, a
-    ld a, 0
-    adc a, h
-    ld h, a
-    ret
+;------------------------------------------------------------------------------
 
+; Description: Add A to HL.
 ; Description: Divide HL by C
 ; Input: HL:dividend; C=divisor
 ; Output: HL:quotient; A:remainder
@@ -143,6 +148,21 @@ clearU40BC:
     ld h, b
     ld l, c
     jr clearU40AltEntry
+
+;------------------------------------------------------------------------------
+
+; Description: Copy U40 from HL to DE.
+; Destroys: none
+copyU40:
+    push bc
+    push de
+    push hl
+    ld bc, 5
+    ldir
+    pop hl
+    pop de
+    pop bc
+    ret
 
 ;------------------------------------------------------------------------------
 
